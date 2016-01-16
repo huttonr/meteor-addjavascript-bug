@@ -1,9 +1,9 @@
 
-## addJavascript bug example
+## addJavaScript bug example
 ##### *(Applies to Meteor v1.3-modules-beta.4)*
 
 The following `plugin.js` does not work.
-The javascript added with `addJavascript` will not be executed.
+The javascript added with `addJavaScript` will not be executed.
 Though it works as expected in Meteor v1.2.1.
 
 ```javascript
@@ -18,6 +18,7 @@ class TestPackCompiler {
   processFilesForTarget(filesFound) {
     let settingsFile = filesFound[0]
 
+    // This shows up fine in the server console
     console.log('\ntestpack compiler is being executed...')
 
     // This added javascript will never be executed in Meteor v1.3 beta 4
