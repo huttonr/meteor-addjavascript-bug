@@ -10,6 +10,7 @@ class TestPackCompiler {
   processFilesForTarget(filesFound) {
     let settingsFile = filesFound[0]
 
+    // This shows up fine in the server console
     console.log('\ntestpack compiler is being executed...')
 
     // This added javascript will never be executed in Meteor v1.3 beta 4
