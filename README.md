@@ -2,7 +2,7 @@
 ## addJavascript bug example
 ##### *(Applies to Meteor v1.3-modules-beta.4)*
 
-The following `packages/testpack/plugin.js` does not work.
+The following `plugin.js` does not work.
 The javascript added with `addJavascript` will not be executed.
 Though it works as expected in Meteor v1.2.1.
 
