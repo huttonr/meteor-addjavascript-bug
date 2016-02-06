@@ -1,31 +1,40 @@
 
 ## addJavaScript bug example
-##### *(Applies to Meteor v1.3-modules-beta.4)*
+##### *(Applies to Meteor 1.3-modules-beta.8 and earlier beta versions)*
 
-The following `packages/testpack/plugin.js` does not work.
+The following `plugin.js` does not work.
 The javascript added with `addJavaScript` will not be executed.
-Though it works as expected in Meteor v1.2.1.
+The css added with `addStylesheet` will not be executed.
+Though it works as expected in Meteor 1.2.1.
 
 ```javascript
-const path = Plugin.path
+var path = Plugin.path
 
 Plugin.registerCompiler({
   extensions: [],
   filenames: ['testcompile.json']
-}, () => new TestPackCompiler)
+}, function () {
+  return new TestPackCompiler();
+});
 
-class TestPackCompiler {
-  processFilesForTarget(filesFound) {
-    let settingsFile = filesFound[0]
+TestPackCompiler = function () {}
 
-    // This shows up fine in the server console
-    console.log('\ntestpack compiler is being executed...')
+TestPackCompiler.prototype.processFilesForTarget = function (filesFound) {
+  var settingsFile = filesFound[0];
 
-    // This added javascript will never be executed (in Meteor v1.3 beta 4)
-    settingsFile.addJavaScript({
-      data: 'console.log("SUCCESS!"); alert("SUCCESS!");',
-      path: path.join('client', 'successmessage.js')
-    })
-  }
-}
+  // This shows up fine in the server console
+  console.log('\ntestpack compiler is being executed...');
+
+  // This added javascript will never be executed as of Meteor 1.3 beta 1
+  settingsFile.addJavaScript({
+    data: 'console.log("SUCCESS!"); alert("SUCCESS!");\n',
+    path: path.join('client', 'successmessage.js')
+  });
+
+  // This added css will never be added in Meteor 1.3 beta 8 (and some earlier beta versions)
+  settingsFile.addStylesheet({
+    data: '.teststyle { background-color: red }\n',
+    path: path.join('client', 'stylesheets', 'mystylesheet.css')
+  });
+};
 ```
