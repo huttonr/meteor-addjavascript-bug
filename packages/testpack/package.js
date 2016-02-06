@@ -11,7 +11,7 @@ Package.onUse(function(api) {
   //api.versionsFrom('1.2.1');
 
   //api.use('ecmascript@0.4.0-modules.8'); // Also doesn't work
-  //api.use('ecmascript');
+  api.use('ecmascript');
 
   api.use('isobuild:compiler-plugin@1.0.0');
 });
@@ -19,6 +19,8 @@ Package.onUse(function(api) {
 Package.registerBuildPlugin({
   name: 'build-testpack',
   use: [
+    'caching-compiler',
+    'ecmascript'
     //'ecmascript@0.4.0-modules.8' // Also doesn't work
     //'ecmascript@0.1.6'
   ],

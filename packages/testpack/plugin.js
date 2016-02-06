@@ -1,58 +1,43 @@
 
-// const path = Plugin.path
-
-// Plugin.registerCompiler({
-//   extensions: [],
-//   filenames: ['testcompile.json']
-// }, () => new TestPackCompiler)
-
-// class TestPackCompiler {
-//   processFilesForTarget(filesFound) {
-//     let settingsFile = filesFound[0]
-
-//     // This shows up fine in the server console
-//     console.log('\ntestpack compiler is being executed...')
-
-//     // This added javascript will never be executed as of Meteor 1.3 beta 1
-//     settingsFile.addJavaScript({
-//       data: 'console.log("SUCCESS!"); alert("SUCCESS!");\n',
-//       path: path.join('client', 'successmessage.js')
-//     })
-
-//     // This added css will never be added in Meteor 1.3 beta 8 (and some earlier beta versions)
-//     settingsFile.addStylesheet({
-//       data: '.teststyle { background-color: red }\n',
-//       path: path.join('client', 'stylesheets', 'mystylesheet.css')
-//     })
-//   }
-// }
-
-var path = Plugin.path
+const path = Plugin.path
 
 Plugin.registerCompiler({
-  extensions: [],
+  //extensions: ['json'],
   filenames: ['testcompile.json']
-}, function () {
-  return new TestPackCompiler();
-});
+}, () => new TestPackCompiler)
 
-TestPackCompiler = function () {}
+class TestPackCompiler extends CachingCompiler {
+  constructor() {
+    super({
+      compilerName: 'test-compiler',
+      defaultCacheSize: 1024*1024*10,
+    })
+  }
 
-TestPackCompiler.prototype.processFilesForTarget = function (filesFound) {
-  var settingsFile = filesFound[0];
+  getCacheKey(inputFile) {
+    return inputFile.getSourceHash()
+  }
 
-  // This shows up fine in the server console
-  console.log('\ntestpack compiler is being executed...');
+  compileResultSize(compileResult) {
+    return 1000
+    //return compileResult.source.length + compileResult.sourceMap.length
+  }
 
-  // This added javascript will never be executed as of Meteor 1.3 beta 1
-  settingsFile.addJavaScript({
-    data: 'console.log("SUCCESS!"); alert("SUCCESS!");\n',
-    path: path.join('client', 'successmessage.js')
-  });
+  compileOneFile(inputFile) {
+    return {testing: 'test', source: 'blah'}
+  }
 
-  // This added css will never be added in Meteor 1.3 beta 8 (and some earlier beta versions)
-  settingsFile.addStylesheet({
-    data: '.teststyle { background-color: red }\n',
-    path: path.join('client', 'stylesheets', 'mystylesheet.css')
-  });
-};
+  addCompileResult(inputFile, compileResult) {
+    // This added javascript will never be executed as of Meteor 1.3 beta 1
+    inputFile.addJavaScript({
+      data: 'console.log("SUCCESS!"); alert("SUCCESS!");\n',
+      path: path.join('client', 'successmessage.js')
+    })
+
+    // This added css will never be added in Meteor 1.3 beta 8 (and some earlier beta versions)
+    inputFile.addStylesheet({
+      data: '.teststyle { background-color: red }\n',
+      path: path.join('client', 'stylesheets', 'mystylesheet.css')
+    })
+  }
+}
