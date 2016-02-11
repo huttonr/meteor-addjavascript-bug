@@ -3,7 +3,7 @@
 
 // Plugin.registerCompiler({
 //   extensions: [],
-//   filenames: ['testcompile.json']
+//   filenames: ['testcompile.myext']
 // }, () => new TestPackCompiler)
 
 // class TestPackCompiler {
@@ -31,7 +31,7 @@ var path = Plugin.path
 
 Plugin.registerCompiler({
   extensions: [],
-  filenames: ['testcompile.json']
+  filenames: ['testcompile.myext']
 }, function () {
   return new TestPackCompiler();
 });
